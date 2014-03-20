@@ -1,7 +1,7 @@
 package move;
 
 public class Move {
-    
+
     private String playerName; //name of the player that did this move
     private String illegalMove = ""; //gets the value of the error message if move is illegal, else remains empty
     

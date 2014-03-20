@@ -11,8 +11,7 @@ public class PlaceArmiesMove extends Move {
     private Region region;
     private int armies;
     
-    public PlaceArmiesMove(String playerName, Region region, int armies)
-    {
+    public PlaceArmiesMove(String playerName, Region region, int armies) {
         super.setPlayerName(playerName);
         this.region = region;
         this.armies = armies;
