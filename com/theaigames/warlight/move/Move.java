@@ -1,4 +1,4 @@
-package move;
+package com.theaigames.warlight.move;
 
 public class Move {
 

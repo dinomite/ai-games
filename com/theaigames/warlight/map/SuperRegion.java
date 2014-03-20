@@ -1,4 +1,4 @@
-package main;
+package com.theaigames.warlight.map;
 
 import java.util.LinkedList;
 

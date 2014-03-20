@@ -1,10 +1,10 @@
-package bot;
+package com.theaigames.warlight.bot;
 
 import java.util.ArrayList;
 
-import main.Region;
-import move.AttackTransferMove;
-import move.PlaceArmiesMove;
+import com.theaigames.warlight.map.Region;
+import com.theaigames.warlight.move.AttackTransferMove;
+import com.theaigames.warlight.move.PlaceArmiesMove;
 
 public interface Bot {
     

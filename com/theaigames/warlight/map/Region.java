@@ -1,4 +1,4 @@
-package main;
+package com.theaigames.warlight.map;
 
 import java.util.LinkedList;
 
@@ -42,10 +42,7 @@ public class Region {
      * @return True if this Region is a neighbor of given Region, false otherwise
      */
     public boolean isNeighbor(Region region) {
-        if (neighbors.contains(region)) {
-            return true;
-        }
-        return false;
+        return neighbors.contains(region);
     }
 
     /**
@@ -53,10 +50,7 @@ public class Region {
      * @return True if this region is owned by given playerName, false otherwise
      */
     public boolean ownedByPlayer(String playerName) {
-        if (playerName.equals(this.playerName)) {
-            return true;
-        }
-        return false;
+        return playerName.equals(this.playerName);
     }
 
     /**

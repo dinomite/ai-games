@@ -1,4 +1,4 @@
-package bot;
+package net.dinomite.aigames.warlight;
 
 /**
  * This is a simple bot that does random (but correct) moves.
@@ -13,10 +13,12 @@ package bot;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import main.Region;
-import main.SuperRegion;
-import move.AttackTransferMove;
-import move.PlaceArmiesMove;
+import com.theaigames.warlight.bot.Bot;
+import com.theaigames.warlight.bot.BotParser;
+import com.theaigames.warlight.bot.BotState;
+import com.theaigames.warlight.map.Region;
+import com.theaigames.warlight.move.AttackTransferMove;
+import com.theaigames.warlight.move.PlaceArmiesMove;
 
 public class BotStarter implements Bot {
     @Override

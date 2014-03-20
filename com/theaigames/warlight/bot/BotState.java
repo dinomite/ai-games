@@ -1,30 +1,33 @@
-package bot;
+package com.theaigames.warlight.bot;
 
 import java.util.ArrayList;
 
-import main.Map;
-import main.Region;
-import main.SuperRegion;
+import com.theaigames.warlight.map.Map;
+import com.theaigames.warlight.map.Region;
+import com.theaigames.warlight.map.SuperRegion;
 
-import move.AttackTransferMove;
-import move.PlaceArmiesMove;
-import move.Move;
+import com.theaigames.warlight.move.AttackTransferMove;
+import com.theaigames.warlight.move.PlaceArmiesMove;
+import com.theaigames.warlight.move.Move;
 
 public class BotState {
 
     private String myName = "";
     private String opponentName = "";
 
+    // This map is known from the start, contains all the regions and how they are connected, doesn't change after initialization
     private final Map fullMap = new Map();
-        //This map is known from the start, contains all the regions and how they are connected, doesn't change after initialization
-    private Map visibleMap; //This map represents everything the player can see, updated at the end of each round.
+    //This map represents everything the player can see, updated at the end of each round.
+    private Map visibleMap;
 
+    //2 randomly chosen regions from each superregion are given, which the bot can chose to start with
     private ArrayList<Region> pickableStartingRegions;
-        //2 randomly chosen regions from each superregion are given, which the bot can chose to start with
 
-    private ArrayList<Move> opponentMoves; //list of all the opponent's moves, reset at the end of each round
+    //list of all the opponent's moves, reset at the end of each round
+    private ArrayList<Move> opponentMoves;
 
-    private int startingArmies; //number of armies the player can place on map
+    //number of armies the player can place on map
+    private int startingArmies;
 
     private int roundNumber;
 

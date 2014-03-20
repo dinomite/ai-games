@@ -1,5 +1,5 @@
-package move;
-import main.Region;
+package com.theaigames.warlight.move;
+import com.theaigames.warlight.map.Region;
 
 /**
  * This Move is used in the first part of each round. It represents what Region is increased
