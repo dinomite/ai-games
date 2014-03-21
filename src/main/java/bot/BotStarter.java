@@ -49,23 +49,29 @@ public class BotStarter implements Bot {
         LinkedList<SuperRegion> superRegions = state.getVisibleMap().getSuperRegions();
         Collections.sort(superRegions, new SuperRegionOwnershipShareComparator(myName));
 
-        while (armiesLeft > 0) {
-            for (Region region : state.getVisibleMap().getOwnedRegions(myName)) {
-                // That have neutral neighbors
-                LinkedList<Region> neutralNeighbors = region.getNeutralNeighbors();
-                if (neutralNeighbors.size() != 0) {
-                    // Give the region enough armies to attack a neutral neighbor
-                    int armiesToPlace = armiesNeeded(neutralNeighbors.getFirst()) - region.getArmies() + 1;
-                    if (armiesToPlace > armiesLeft) {
-                        armiesToPlace = armiesLeft;
-                    }
-                    placeArmiesMoves.add(new PlaceArmiesMove(myName, region, armiesToPlace));
-                    armiesLeft = armiesLeft - armiesToPlace;
+        for (Region region : state.getVisibleMap().getOwnedRegions(myName)) {
+            if (armiesLeft <= 0) {
+                break;
+            }
+
+            // Regions with neutral neighbors
+            LinkedList<Region> neutralNeighbors = region.getNeutralNeighbors();
+            if (neutralNeighbors.size() != 0) {
+                // Give the region enough armies to attack a neutral neighbor
+                int armiesToPlace = armiesNeeded(neutralNeighbors.getFirst()) - region.getArmies() + 1;
+                if (armiesToPlace > armiesLeft) {
+                    armiesToPlace = armiesLeft;
                 }
+                placeArmiesMoves.add(new PlaceArmiesMove(myName, region, armiesToPlace));
+                armiesLeft = armiesLeft - armiesToPlace;
             }
         }
 
-        System.err.println("Returning " + placeArmiesMoves.size() + " placement moves");
+
+        System.err.println("Round " + state.getRoundNumber() + " " + placeArmiesMoves.size() + " placement moves");
+        for (PlaceArmiesMove move : placeArmiesMoves) {
+            System.err.println(move.getString());
+        }
         return placeArmiesMoves;
     }
 
