@@ -2,6 +2,9 @@ package com.theaigames.warlight.map;
 
 import java.util.LinkedList;
 
+/**
+ * The entire game Map, which contains many Regions, each of which is part of a bonus-providing SuperRegion.
+ */
 public class Map {
 
     public LinkedList<Region> regions;

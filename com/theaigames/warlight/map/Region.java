@@ -2,6 +2,9 @@ package com.theaigames.warlight.map;
 
 import java.util.LinkedList;
 
+/**
+ * A Region on the map
+ */
 public class Region {
 
     private int id;

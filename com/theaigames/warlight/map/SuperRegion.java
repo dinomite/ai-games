@@ -2,6 +2,15 @@ package com.theaigames.warlight.map;
 
 import java.util.LinkedList;
 
+/**
+ * A collection of Regions on the map that provides a bonus.  In the standard world map these are:
+ *  - Africa
+ *  - Asia
+ *  - Australia
+ *  - Europe
+ *  - North America
+ *  - South America
+ */
 public class SuperRegion {
 
     private int id;
