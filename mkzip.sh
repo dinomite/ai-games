@@ -11,6 +11,7 @@ cd "$SOURCE_ROOT"
 
 # Make sure it builds
 javac bot/BotStarter.java
+find .|grep "\.class$"|xargs rm
 
 zip -r "$ZIPFILE" com bot net
 
