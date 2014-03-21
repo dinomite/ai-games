@@ -1,13 +1,13 @@
 #!/bin/bash
 ORIGINAL_DIR="`pwd`"
-SCRIPT_PATH="`( cd \"$MY_PATH\" && pwd )`"
-SCRIPT_DIR="${SCRIPT_PATH##*/}"
+SCRIPT_DIR="`( cd \"$MY_PATH\" && pwd )`"
+SOURCE_ROOT="src/main/java"
 
-ZIPFILE="dinomite-bot.zip"
-
-cd "$SCRIPT_DIR"
+ZIPFILE="$SCRIPT_DIR/dinomite-bot.zip"
 
 rm "$ZIPFILE"
+
+cd "$SOURCE_ROOT"
 zip -r "$ZIPFILE" README.md com bot net
 
 cd "$ORIGINAL_DIR"
