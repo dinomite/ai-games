@@ -26,11 +26,13 @@ public class Map {
      * @param region : Region to be added
      */
     public void add(Region region) {
-        for (Region r : regions)
+        for (Region r : regions) {
             if (r.getId() == region.getId()) {
                 System.err.println("Region cannot be added: id already exists.");
                 return;
             }
+        }
+
         regions.add(region);
     }
 
@@ -40,11 +42,13 @@ public class Map {
      * @param superRegion : SuperRegion to be added
      */
     public void add(SuperRegion superRegion) {
-        for (SuperRegion s : superRegions)
+        for (SuperRegion s : superRegions) {
             if (s.getId() == superRegion.getId()) {
                 System.err.println("SuperRegion cannot be added: id already exists.");
                 return;
             }
+        }
+
         superRegions.add(superRegion);
     }
 
@@ -53,24 +57,25 @@ public class Map {
      */
     public Map getMapCopy() {
         Map newMap = new Map();
-        for (SuperRegion sr : superRegions) //copy superRegions
-        {
+        for (SuperRegion sr : superRegions)  {
             SuperRegion newSuperRegion = new SuperRegion(sr.getId(), sr.getArmiesReward());
             newMap.add(newSuperRegion);
         }
-        for (Region r : regions) //copy regions
-        {
+
+        for (Region r : regions) {
             Region newRegion =
                 new Region(r.getId(), newMap.getSuperRegion(r.getSuperRegion().getId()), r.getOwner(),
                     r.getArmies());
             newMap.add(newRegion);
         }
-        for (Region r : regions) //add neighbors to copied regions
-        {
+
+        for (Region r : regions) {
             Region newRegion = newMap.getRegion(r.getId());
-            for (Region neighbor : r.getNeighbors())
+            for (Region neighbor : r.getNeighbors()) {
                 newRegion.addNeighbor(newMap.getRegion(neighbor.getId()));
+            }
         }
+
         return newMap;
     }
 
