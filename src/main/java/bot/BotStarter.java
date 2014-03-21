@@ -56,11 +56,16 @@ public class BotStarter implements Bot {
                 if (neutralNeighbors.size() != 0) {
                     // Give the region enough armies to attack a neutral neighbor
                     int armiesToPlace = armiesNeeded(neutralNeighbors.getFirst()) - region.getArmies() + 1;
+                    if (armiesToPlace > armiesLeft) {
+                        armiesToPlace = armiesLeft;
+                    }
                     placeArmiesMoves.add(new PlaceArmiesMove(myName, region, armiesToPlace));
+                    armiesLeft = armiesLeft - armiesToPlace;
                 }
             }
         }
 
+        System.err.println("Returning " + placeArmiesMoves.size() + " placement moves");
         return placeArmiesMoves;
     }
 
