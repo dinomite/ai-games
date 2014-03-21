@@ -59,16 +59,24 @@ public class BotStarter implements Bot {
             if (neutralNeighbors.size() != 0) {
                 // Give the region enough armies to attack a neutral neighbor
                 int armiesToPlace = armiesNeeded(neutralNeighbors.getFirst()) - region.getArmies() + 1;
+
+                // Don't place zero or negative armies
+                if (armiesToPlace <= 0) {
+                    continue;
+                }
+
+                // Only place available armies
                 if (armiesToPlace > armiesLeft) {
                     armiesToPlace = armiesLeft;
                 }
+
                 placeArmiesMoves.add(new PlaceArmiesMove(myName, region, armiesToPlace));
                 armiesLeft = armiesLeft - armiesToPlace;
             }
         }
 
 
-        System.err.println("Round " + state.getRoundNumber() + " " + placeArmiesMoves.size() + " placement moves");
+        System.err.println("Round " + state.getRoundNumber() + ": " + placeArmiesMoves.size() + " placement moves");
         for (PlaceArmiesMove move : placeArmiesMoves) {
             System.err.println(move.getString());
         }
