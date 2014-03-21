@@ -117,7 +117,7 @@ public class BotState {
                 String playerName = mapInput[i + 1];
                 int armies = Integer.parseInt(mapInput[i + 2]);
 
-                region.setPlayerName(playerName);
+                region.setOwner(playerName);
                 region.setArmies(armies);
                 i += 2;
             } catch (Exception e) {
@@ -128,7 +128,7 @@ public class BotState {
 
         //remove regions which are unknown.
         for (Region region : visibleMap.regions)
-            if (region.getPlayerName().equals("unknown")) {
+            if (region.getOwner().equals("unknown")) {
                 unknownRegions.add(region);
             }
         for (Region unknownRegion : unknownRegions)

@@ -61,7 +61,7 @@ public class Map {
         for (Region r : regions) //copy regions
         {
             Region newRegion =
-                new Region(r.getId(), newMap.getSuperRegion(r.getSuperRegion().getId()), r.getPlayerName(),
+                new Region(r.getId(), newMap.getSuperRegion(r.getSuperRegion().getId()), r.getOwner(),
                     r.getArmies());
             newMap.add(newRegion);
         }
@@ -134,7 +134,7 @@ public class Map {
         String mapString = "";
         for (Region region : regions) {
             mapString =
-                mapString.concat(region.getId() + ";" + region.getPlayerName() + ";" + region.getArmies() + " ");
+                mapString.concat(region.getId() + ";" + region.getOwner() + ";" + region.getArmies() + " ");
         }
         return mapString;
     }

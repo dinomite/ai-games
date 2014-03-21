@@ -6,32 +6,41 @@ import java.util.LinkedList;
  * A Region on the map
  */
 public class Region {
+    // TODO neutral vs. unknown
     public static final String NEUTRAL = "neutral";
+    public static final String UNKNOWN = "unknown";
 
     private int id;
     private LinkedList<Region> neighbors;
     private SuperRegion superRegion;
     private int armies;
-    private String playerName;
+    private String owner;
 
     public Region(int id, SuperRegion superRegion) {
         this.id = id;
         this.superRegion = superRegion;
         this.neighbors = new LinkedList<Region>();
-        this.playerName = "unknown";
+        this.owner = UNKNOWN;
         this.armies = 0;
 
         superRegion.addSubRegion(this);
     }
 
-    public Region(int id, SuperRegion superRegion, String playerName, int armies) {
+    public Region(int id, SuperRegion superRegion, String owner, int armies) {
         this.id = id;
         this.superRegion = superRegion;
         this.neighbors = new LinkedList<Region>();
-        this.playerName = playerName;
+        this.owner = owner;
         this.armies = armies;
 
         superRegion.addSubRegion(this);
+    }
+
+    /**
+     * @return The id of this Region
+     */
+    public int getId() {
+        return id;
     }
 
     public void addNeighbor(Region neighbor) {
@@ -50,11 +59,10 @@ public class Region {
     }
 
     /**
-     * @param playerName A string with a player's name
-     * @return True if this region is owned by given playerName, false otherwise
+     * @return The number of armies on this region
      */
-    public boolean ownedByPlayer(String playerName) {
-        return playerName.equals(this.playerName);
+    public int getArmies() {
+        return armies;
     }
 
     /**
@@ -65,17 +73,32 @@ public class Region {
     }
 
     /**
-     * @param playerName Sets the Name of the player that this Region belongs to
+     * @return A string with the name of the player that owns this region
      */
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+    public String getOwner() {
+        return owner;
     }
 
     /**
-     * @return The id of this Region
+     * @param owner Sets the Name of the player that this Region belongs to
      */
-    public int getId() {
-        return id;
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    /**
+     * @return True if this territory's owner is the neutral player
+     */
+    public boolean isNeutral() {
+        return ownedByPlayer(UNKNOWN);
+    }
+
+    /**
+     * @param playerName A string with a player's name
+     * @return True if this region is owned by given owner, false otherwise
+     */
+    public boolean ownedByPlayer(String playerName) {
+        return playerName.equals(this.owner);
     }
 
     /**
@@ -92,7 +115,7 @@ public class Region {
         LinkedList<Region> neutralNeighbors = new LinkedList<>();
 
         for (Region region : neighbors) {
-            if (region.getPlayerName().equals(NEUTRAL)) {
+            if (region.getOwner().equals(UNKNOWN)) {
                 neutralNeighbors.add(region);
             }
         }
@@ -105,19 +128,5 @@ public class Region {
      */
     public SuperRegion getSuperRegion() {
         return superRegion;
-    }
-
-    /**
-     * @return The number of armies on this region
-     */
-    public int getArmies() {
-        return armies;
-    }
-
-    /**
-     * @return A string with the name of the player that owns this region
-     */
-    public String getPlayerName() {
-        return playerName;
     }
 }

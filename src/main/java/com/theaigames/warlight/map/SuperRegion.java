@@ -34,7 +34,7 @@ public class SuperRegion {
      */
     public boolean ownedByPlayer(String player) {
         for (Region region : subRegions) {
-            if (!player.equals(region.getPlayerName())) {
+            if (!player.equals(region.getOwner())) {
                 return false;
             }
         }
@@ -52,7 +52,7 @@ public class SuperRegion {
         int ownedRegions = 0;
 
         for (Region region : subRegions) {
-            if (!player.equals(region.getPlayerName())) {
+            if (!player.equals(region.getOwner())) {
                 ownedRegions++;
             }
         }

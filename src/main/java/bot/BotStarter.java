@@ -92,11 +92,11 @@ public class BotStarter implements Bot {
                     int r = (int) (rand * possibleToRegions.size());
                     Region toRegion = possibleToRegions.get(r);
 
-                    if (!toRegion.getPlayerName().equals(myName) && fromRegion.getArmies() > 6) //do an attack
+                    if (!toRegion.getOwner().equals(myName) && fromRegion.getArmies() > 6) //do an attack
                     {
                         attackTransferMoves.add(new AttackTransferMove(myName, fromRegion, toRegion, armies));
                         break;
-                    } else if (toRegion.getPlayerName().equals(myName) && fromRegion.getArmies() > 1) //do a transfer
+                    } else if (toRegion.getOwner().equals(myName) && fromRegion.getArmies() > 1) //do a transfer
                     {
                         attackTransferMoves.add(new AttackTransferMove(myName, fromRegion, toRegion, armies));
                         break;
