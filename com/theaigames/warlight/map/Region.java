@@ -6,6 +6,7 @@ import java.util.LinkedList;
  * A Region on the map
  */
 public class Region {
+    public static final String NEUTRAL = "neutral";
 
     private int id;
     private LinkedList<Region> neighbors;
@@ -82,6 +83,21 @@ public class Region {
      */
     public LinkedList<Region> getNeighbors() {
         return neighbors;
+    }
+
+    /**
+     * @return A list of this Region's neighboring Regions
+     */
+    public LinkedList<Region> getNeutralNeighbors() {
+        LinkedList<Region> neutralNeighbors = new LinkedList<>();
+
+        for (Region region : neighbors) {
+            if (region.getPlayerName().equals(NEUTRAL)) {
+                neutralNeighbors.add(region);
+            }
+        }
+
+        return neutralNeighbors;
     }
 
     /**

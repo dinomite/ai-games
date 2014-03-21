@@ -2,3 +2,5 @@
 .DS_Store
 *.iml
 .*.sw*
+*.class
+dinomite-bot.zip

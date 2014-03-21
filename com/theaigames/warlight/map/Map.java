@@ -89,6 +89,24 @@ public class Map {
     }
 
     /**
+     * Get all of the {@link Region}s owned by the given player.
+     *
+     * @param player The player to find {@link Region}s for
+     * @return All of the {@link Region}s owned by the given player
+     */
+    public LinkedList<Region> getOwnedRegions(String player) {
+        LinkedList<Region> ownedRegions = new LinkedList<>();
+
+        for (Region region : getRegions()) {
+            if (region.ownedByPlayer(player)) {
+                ownedRegions.add(region);
+            }
+        }
+
+        return ownedRegions;
+    }
+
+    /**
      * @param id : a Region id number
      * @return : the matching Region object
      */

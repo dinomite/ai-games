@@ -8,6 +8,6 @@ ZIPFILE="dinomite-bot.zip"
 cd "$SCRIPT_DIR"
 
 rm "$ZIPFILE"
-zip -r "$ZIPFILE" README.md com bot
+zip -r "$ZIPFILE" README.md com bot net
 
 cd "$ORIGINAL_DIR"

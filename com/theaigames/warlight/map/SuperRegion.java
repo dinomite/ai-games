@@ -32,14 +32,32 @@ public class SuperRegion {
     /**
      * @return A string with the name of the player that fully owns this SuperRegion
      */
-    public String ownedByPlayer() {
-        String playerName = subRegions.getFirst().getPlayerName();
+    public boolean ownedByPlayer(String player) {
         for (Region region : subRegions) {
-            if (!playerName.equals(region.getPlayerName())) {
-                return null;
+            if (!player.equals(region.getPlayerName())) {
+                return false;
             }
         }
-        return playerName;
+
+        return true;
+    }
+
+    /**
+     * Get the ownership share of this SuperRegion
+     *
+     * @param player The player to check ownership for
+     * @return A float between 0 & 1 representing the share of ownership the given player has over this SuperRegion
+     */
+    public float ownershipShare(String player) {
+        int ownedRegions = 0;
+
+        for (Region region : subRegions) {
+            if (!player.equals(region.getPlayerName())) {
+                ownedRegions++;
+            }
+        }
+
+        return ownedRegions / subRegions.size();
     }
 
     /**
