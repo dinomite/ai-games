@@ -6,8 +6,6 @@ import java.util.LinkedList;
  * A Region on the map
  */
 public class Region {
-    // TODO neutral vs. unknown
-    public static final String NEUTRAL = "neutral";
     public static final String UNKNOWN = "unknown";
 
     private int id;
@@ -84,13 +82,6 @@ public class Region {
      */
     public void setOwner(String owner) {
         this.owner = owner;
-    }
-
-    /**
-     * @return True if this territory's owner is the neutral player
-     */
-    public boolean isNeutral() {
-        return ownedByPlayer(UNKNOWN);
     }
 
     /**
