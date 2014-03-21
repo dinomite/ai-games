@@ -50,20 +50,13 @@ public class BotStarter implements Bot {
         Collections.sort(superRegions, new SuperRegionOwnershipShareComparator(myName));
 
         while (armiesLeft > 0) {
-            for (SuperRegion superRegion : superRegions) {
-                // Find regions we own
-                if (superRegion.ownedByPlayer(myName)) {
-                    continue;
-                }
-
+            for (Region region : state.getVisibleMap().getOwnedRegions(myName)) {
                 // That have neutral neighbors
-                for (Region region : superRegion.getSubRegions()) {
-                    LinkedList<Region> neutralNeighbors = region.getNeutralNeighbors();
-                    if (region.ownedByPlayer(myName) && neutralNeighbors.size() != 0) {
-                        // Give the region enough armies to attack a neutral neighbor
-                        int armiesToPlace = armiesNeeded(neutralNeighbors.getFirst()) - region.getArmies() + 1;
-                        placeArmiesMoves.add(new PlaceArmiesMove(myName, region, armiesToPlace));
-                    }
+                LinkedList<Region> neutralNeighbors = region.getNeutralNeighbors();
+                if (region.ownedByPlayer(myName) && neutralNeighbors.size() != 0) {
+                    // Give the region enough armies to attack a neutral neighbor
+                    int armiesToPlace = armiesNeeded(neutralNeighbors.getFirst()) - region.getArmies() + 1;
+                    placeArmiesMoves.add(new PlaceArmiesMove(myName, region, armiesToPlace));
                 }
             }
         }
