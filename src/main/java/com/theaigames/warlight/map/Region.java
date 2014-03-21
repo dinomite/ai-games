@@ -6,7 +6,8 @@ import java.util.LinkedList;
  * A Region on the map
  */
 public class Region {
-    public static final String UNKNOWN = "unknown";
+    private static final String UNKNOWN = "unknown";
+    private static final String NEUTRAL = "neutral";
 
     private int id;
     private LinkedList<Region> neighbors;
@@ -106,12 +107,16 @@ public class Region {
         LinkedList<Region> neutralNeighbors = new LinkedList<>();
 
         for (Region region : neighbors) {
-            if (region.getOwner().equals(UNKNOWN)) {
+            if (region.isNeutral()) {
                 neutralNeighbors.add(region);
             }
         }
 
         return neutralNeighbors;
+    }
+
+    private boolean isNeutral() {
+        return owner.equals(NEUTRAL);
     }
 
     /**
