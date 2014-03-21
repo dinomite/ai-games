@@ -53,7 +53,6 @@ public class BotStarter implements Bot {
         LinkedList<SuperRegion> superRegions = state.getVisibleMap().getSuperRegions();
         Collections.sort(superRegions, new SuperRegionOwnershipShareComparator(myName));
 
-        System.err.println("=============== BEGIN GETTING REGION OWNERSHIP ==============");
         // Make a map of SuperRegions we have a presence in, but don't own
         SortedMap<Float, SuperRegion> superRegionsByOwnership = new TreeMap<>();
         for (SuperRegion superRegion : state.getVisibleMap().getSuperRegions()) {
@@ -64,7 +63,6 @@ public class BotStarter implements Bot {
             }
         }
 
-        System.err.println("=============== BEGIN PLACEMENT ==============");
         List<SuperRegion> values = new ArrayList<>(superRegionsByOwnership.values());
         Collections.reverse(values);
         for (SuperRegion superRegion : values) {
@@ -96,7 +94,7 @@ public class BotStarter implements Bot {
             }
         }
 
-        System.err.println("Round " + state.getRoundNumber() + ": " + placeArmiesMoves.size() + " placement moves");
+        System.err.println("=> Round " + state.getRoundNumber() + ": " + placeArmiesMoves.size() + " placement moves");
         return placeArmiesMoves;
     }
 
