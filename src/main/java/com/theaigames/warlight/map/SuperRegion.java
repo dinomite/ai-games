@@ -52,7 +52,7 @@ public class SuperRegion {
         int ownedRegions = 0;
 
         for (Region region : subRegions) {
-            if (!player.equals(region.getOwner())) {
+            if (player.equals(region.getOwner())) {
                 ownedRegions++;
             }
         }
