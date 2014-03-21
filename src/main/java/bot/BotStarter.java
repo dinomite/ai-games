@@ -53,7 +53,7 @@ public class BotStarter implements Bot {
             for (Region region : state.getVisibleMap().getOwnedRegions(myName)) {
                 // That have neutral neighbors
                 LinkedList<Region> neutralNeighbors = region.getNeutralNeighbors();
-                if (region.ownedByPlayer(myName) && neutralNeighbors.size() != 0) {
+                if (neutralNeighbors.size() != 0) {
                     // Give the region enough armies to attack a neutral neighbor
                     int armiesToPlace = armiesNeeded(neutralNeighbors.getFirst()) - region.getArmies() + 1;
                     placeArmiesMoves.add(new PlaceArmiesMove(myName, region, armiesToPlace));
