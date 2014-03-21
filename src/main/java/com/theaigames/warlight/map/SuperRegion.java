@@ -11,7 +11,7 @@ import java.util.LinkedList;
  *  - North America
  *  - South America
  */
-public class SuperRegion {
+public class SuperRegion extends Ownable {
 
     private int id;
     private int armiesReward;
@@ -43,24 +43,6 @@ public class SuperRegion {
     }
 
     /**
-     * Get the ownership share of this SuperRegion
-     *
-     * @param player The player to check ownership for
-     * @return A float between 0 & 1 representing the share of ownership the given player has over this SuperRegion
-     */
-    public float ownershipShare(String player) {
-        int ownedRegions = 0;
-
-        for (Region region : subRegions) {
-            if (player.equals(region.getOwner())) {
-                ownedRegions++;
-            }
-        }
-
-        return ownedRegions / subRegions.size();
-    }
-
-    /**
      * @return The id of this SuperRegion
      */
     public int getId() {
@@ -77,7 +59,7 @@ public class SuperRegion {
     /**
      * @return A list with the Regions that are part of this SuperRegion
      */
-    public LinkedList<Region> getSubRegions() {
+    public LinkedList<Region> getRegions() {
         return subRegions;
     }
 }

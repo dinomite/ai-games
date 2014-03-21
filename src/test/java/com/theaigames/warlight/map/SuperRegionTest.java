@@ -30,7 +30,7 @@ public final class SuperRegionTest {
         int anotherId = 9;
         Region anotherRegion = new Region(anotherId, superRegion);
         superRegion.addSubRegion(anotherRegion);
-        assertTrue(superRegion.getSubRegions().contains(anotherRegion));
+        assertTrue(superRegion.getRegions().contains(anotherRegion));
     }
 
     @Test
@@ -62,7 +62,7 @@ public final class SuperRegionTest {
 
     @Test
     public void testGetSubRegions() {
-        LinkedList<Region> subRegions = superRegion.getSubRegions();
+        LinkedList<Region> subRegions = superRegion.getRegions();
         assertEquals(1, subRegions.size());
         assertTrue(subRegions.contains(region));
     }

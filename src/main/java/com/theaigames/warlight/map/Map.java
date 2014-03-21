@@ -5,7 +5,7 @@ import java.util.LinkedList;
 /**
  * The entire game Map, which contains many Regions, each of which is part of a bonus-providing SuperRegion.
  */
-public class Map {
+public class Map extends Ownable {
 
     public LinkedList<Region> regions;
     public LinkedList<SuperRegion> superRegions;
