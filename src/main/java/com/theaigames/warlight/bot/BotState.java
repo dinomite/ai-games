@@ -32,8 +32,8 @@ public class BotState {
     private int roundNumber;
 
     public BotState() {
-        pickableStartingRegions = new ArrayList<Region>();
-        opponentMoves = new ArrayList<Move>();
+        pickableStartingRegions = new ArrayList<>();
+        opponentMoves = new ArrayList<>();
         roundNumber = 0;
     }
 
@@ -81,8 +81,8 @@ public class BotState {
                     Region region = fullMap.getRegion(Integer.parseInt(mapInput[i]));
                     i++;
                     String[] neighborIds = mapInput[i].split(",");
-                    for (int j = 0; j < neighborIds.length; j++) {
-                        Region neighbor = fullMap.getRegion(Integer.parseInt(neighborIds[j]));
+                    for (String neighborId : neighborIds) {
+                        Region neighbor = fullMap.getRegion(Integer.parseInt(neighborId));
                         region.addNeighbor(neighbor);
                     }
                 } catch (Exception e) {
