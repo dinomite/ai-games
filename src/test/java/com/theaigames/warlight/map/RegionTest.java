@@ -92,7 +92,7 @@ public final class RegionTest {
 
     @Test
     public void testGetNeutralNeighbors() {
-        Region neutralNeighbor = new Region(regionId + 1, superRegion);
+        Region neutralNeighbor = new Region(regionId + 1, superRegion, "neutral", 2);
         region.addNeighbor(neutralNeighbor);
 
         Region ownedNeighbor = new Region(regionId + 1, superRegion, "opponent", 5);
