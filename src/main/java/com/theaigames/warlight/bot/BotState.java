@@ -38,15 +38,13 @@ public class BotState {
     }
 
     public void updateSettings(String key, String value) {
-        if (key.equals("your_bot")) //bot's own name
-        {
+        if (key.equals("your_bot")) {
             myName = value;
-        } else if (key.equals("opponent_bot")) //opponent's name
-        {
+        } else if (key.equals("opponent_bot")) {
             opponentName = value;
         } else if (key.equals("starting_armies")) {
             startingArmies = Integer.parseInt(value);
-            roundNumber++; //next round
+            roundNumber++;
         }
     }
 

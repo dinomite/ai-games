@@ -14,13 +14,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
 public class BotStarter implements Bot {
     private final float MIN_ATTACK_RATIO = 3;
 
-    private BotStarter() {
+    public BotStarter() {
     }
 
     @Override
@@ -135,7 +136,7 @@ public class BotStarter implements Bot {
     }
 
     public static void main(String[] args) {
-        BotParser parser = new BotParser(new BotStarter());
+        BotParser parser = new BotParser(new BotStarter(), new Scanner(System.in), new BotState());
         parser.run();
     }
 }

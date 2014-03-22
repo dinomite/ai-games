@@ -12,11 +12,10 @@ public class BotParser {
     private final Bot bot;
     private final BotState currentState;
 
-    public BotParser(Bot bot) {
+    public BotParser(Bot bot, Scanner scanner, BotState botState) {
         this.bot = bot;
-
-        this.scan = new Scanner(System.in);
-        this.currentState = new BotState();
+        this.scan = scanner;
+        this.currentState = botState;
     }
 
     public void run() {
@@ -65,13 +64,13 @@ public class BotParser {
     }
 
     private void pickStartingRegions(String[] parts) {
-        //pick which regions you want to start with
         currentState.setPickableStartingRegions(parts);
-        ArrayList<Region> preferredStartingRegions =
-            bot.getPreferredStartingRegions(currentState, Long.valueOf(parts[1]));
+
+        ArrayList<Region> preferredStartingRegions = bot.getPreferredStartingRegions(currentState, Long.valueOf(parts[1]));
         String output = "";
-        for (Region region : preferredStartingRegions)
+        for (Region region : preferredStartingRegions) {
             output = output.concat(region.getId() + " ");
+        }
 
         System.out.println(output);
     }
