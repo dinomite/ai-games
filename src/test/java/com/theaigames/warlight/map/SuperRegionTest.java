@@ -45,9 +45,20 @@ public final class SuperRegionTest {
     }
 
     @Test
-    public void testOwnershipShare() {
+    public void testOwnershipShare_Full() {
         region.setOwner(owner);
         assertEquals(1.0f, superRegion.ownershipShare(owner), 0);
+    }
+
+    @Test
+    public void testOwnershipShare_Partial() {
+        region.setOwner(owner);
+
+        int anotherId = 9;
+        Region anotherRegion = new Region(anotherId, superRegion);
+        superRegion.addSubRegion(anotherRegion);
+
+        assertEquals(0.5f, superRegion.ownershipShare(owner), 0);
     }
 
     @Test
