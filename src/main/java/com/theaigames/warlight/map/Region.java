@@ -115,6 +115,18 @@ public class Region {
         return neutralNeighbors;
     }
 
+    public LinkedList<Region> getNeighborsNotOwned(String playerName) {
+        LinkedList<Region> unownedNeighbors = new LinkedList<>();
+
+        for (Region region : neighbors) {
+            if (!region.ownedByPlayer(playerName)) {
+                unownedNeighbors.add(region);
+            }
+        }
+
+        return unownedNeighbors;
+    }
+
     private boolean isNeutral() {
         return owner.equals(NEUTRAL);
     }
