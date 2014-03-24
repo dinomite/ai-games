@@ -7,18 +7,19 @@ import com.theaigames.warlight.map.Region;
 import com.theaigames.warlight.map.SuperRegion;
 import com.theaigames.warlight.move.AttackTransferMove;
 import com.theaigames.warlight.move.PlaceArmiesMove;
+import net.dinomite.theaigames.warlight.MapUtil;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Scanner;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.Set;
 
 public class BotStarter implements Bot {
+    private final int MIN_ATTACK_ARMIES = 2;
     private final float MIN_ATTACK_RATIO = 3;
-    private final int STARTING_REGIONS = 6;
+    private final int NUM_STARTING_REGIONS = 6;
 
     public BotStarter() {
     }
@@ -26,7 +27,7 @@ public class BotStarter implements Bot {
     @Override
     public ArrayList<Region> getPreferredStartingRegions(BotState state, Long timeOut) {
         ArrayList<Region> preferredStartingRegions = new ArrayList<>();
-        for (int i = 0; i < STARTING_REGIONS; i++) {
+        for (int i = 0; i < NUM_STARTING_REGIONS; i++) {
             double rand = Math.random();
             int r = (int) (rand * state.getPickableStartingRegions().size());
             int regionId = state.getPickableStartingRegions().get(r).getId();
@@ -48,11 +49,12 @@ public class BotStarter implements Bot {
         String myName = state.getMyPlayerName();
         int armiesLeft = state.getStartingArmies();
 
-        // Sort the regions by the one we have the largest ownership share of (i.e. easiest to capture, in a naive sense)
-//        LinkedList<SuperRegion> superRegions = state.getVisibleMap().getSuperRegions();
-//        Collections.sort(superRegions, new SuperRegionOwnershipShareComparator(myName));
-
         for (SuperRegion superRegion : getSuperRegionsByHighestOwnership(state, myName)) {
+            if (superRegion.ownedByPlayer(myName)) {
+                // TODO distribute armies to edges of owned regions
+                continue;
+            }
+
             for (Region region : superRegion.getOwnedRegions(myName)) {
                 if (armiesLeft <= 0) {
                     break;
@@ -90,6 +92,9 @@ public class BotStarter implements Bot {
         ArrayList<AttackTransferMove> attackTransferMoves = new ArrayList<>();
         String myName = state.getMyPlayerName();
 
+        // TODO attack opponents, not just neutrals
+
+        // Attack neutral regions
         for (SuperRegion superRegion : getSuperRegionsByHighestOwnership(state, myName)) {
             // Skip regions we already own
             if (superRegion.ownedByPlayer(myName)) {
@@ -103,16 +108,34 @@ public class BotStarter implements Bot {
                 LinkedList<Region> unownedNeighbors = myRegion.getNeighborsNotOwned(myName);
                 for (Region regionToAttack : unownedNeighbors) {
                     int availableArmies = myRegion.getArmies() - commitedArmies - 1;
+                    if (availableArmies < MIN_ATTACK_ARMIES) {
+                        break;
+                    }
+
                     int neededToAttack = (int) Math.ceil(regionToAttack.getArmies() * MIN_ATTACK_RATIO);
                     if (availableArmies >= neededToAttack) {
                         attackTransferMoves.add(new AttackTransferMove(myName, myRegion, regionToAttack, neededToAttack));
+                        commitedArmies += neededToAttack;
                     }
                 }
             }
         }
-        // TODO move armies that are in regions surrounded by owned regions
 
-        // TODO attack opponents, not just neutrals
+        // Move armies that are in regions surrounded by owned regions
+        for (Region region : state.getVisibleMap().getOwnedRegions(myName)) {
+            if (region.getNeighborsNotOwned(myName).size() == 0) {
+                // Find the neighboring region with the most unowned neighbors
+                Map<Region, Integer> numUnownedNeighborsOfNeighbors = new HashMap<>();
+                for (Region neighbor : region.getNeighbors()) {
+                    int numUnownedNeighbors = neighbor.getNeighborsNotOwned(myName).size();
+                    numUnownedNeighborsOfNeighbors.put(neighbor, numUnownedNeighbors);
+                }
+                // Our neighbors, sorted by the number of neighbors they have which we don't own
+                Set<Region> neighborsUnownedNeighbors = MapUtil.sortByValue(numUnownedNeighborsOfNeighbors).keySet();
+
+                attackTransferMoves.add(new AttackTransferMove(myName, region, neighborsUnownedNeighbors.iterator().next(), region.getArmies() - 1));
+            }
+        }
 
         return attackTransferMoves;
     }
@@ -120,25 +143,19 @@ public class BotStarter implements Bot {
     /**
      * Get the super regions we have a presence in, ordered by the most ownership to least
      *
-     * @param state
-     * @param myName
-     * @return
+     * @param state The current {@link BotState}
+     * @param myName A player name to get the super region ownership share for
+     * @return The super regions, sorted by the given player's ownership share
      */
-    private ArrayList<SuperRegion> getSuperRegionsByHighestOwnership(BotState state, String myName) {
-        // Make a map of SuperRegions we have a presence in, but don't own
-        SortedMap<Float, SuperRegion> superRegionsByOwnership = new TreeMap<>();
+    private Set<SuperRegion> getSuperRegionsByHighestOwnership(BotState state, String myName) {
+        Map<SuperRegion, Float> superRegionOwnershipShares = new HashMap<>();
         for (SuperRegion superRegion : state.getVisibleMap().getSuperRegions()) {
             float ownershipShare = superRegion.ownershipShare(myName);
             System.err.println("SuperRegion " + superRegion.getId() + " ownership share: " + ownershipShare);
-            if (!superRegion.ownedByPlayer(myName)) {
-                superRegionsByOwnership.put(ownershipShare, superRegion);
-            }
+            superRegionOwnershipShares.put(superRegion, ownershipShare);
         }
 
-        // Sort from highest owned to lowest
-        ArrayList<SuperRegion> superRegions = new ArrayList<>(superRegionsByOwnership.values());
-        Collections.reverse(superRegions);
-        return superRegions;
+        return MapUtil.sortByValue(superRegionOwnershipShares).keySet();
     }
 
     private int armiesNeeded(Region region) {

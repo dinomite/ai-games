@@ -2,7 +2,7 @@ package com.theaigames.warlight.map;
 
 import java.util.LinkedList;
 
-abstract class Ownable {
+public abstract class Ownable {
     /**
      * Get the ownership share of this SuperRegion
      *
