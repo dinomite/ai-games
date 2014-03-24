@@ -51,9 +51,9 @@ public class BotStarter implements Bot {
         String myName = state.getMyPlayerName();
         int armiesLeft = state.getStartingArmies();
 
+        // Place armies in unowned SuperRegions to take them over
         for (SuperRegion superRegion : getSuperRegionsByHighestOwnership(state, myName)) {
             if (superRegion.ownedByPlayer(myName)) {
-                // TODO distribute armies to edges of owned regions
                 continue;
             }
 
@@ -81,6 +81,18 @@ public class BotStarter implements Bot {
                     System.err.println("Placing " + armiesToPlace + " in region " + region.getId() + " within super region " + superRegion.getId());
                     placeArmiesMoves.add(new PlaceArmiesMove(myName, region, armiesToPlace));
                     armiesLeft = armiesLeft - armiesToPlace;
+                }
+            }
+        }
+
+        // Place remaining armies on edges of SuperRegions we own
+        // TODO distribute armies to edges of owned regions
+        if (armiesLeft > 0) {
+            for (Region region : state.getVisibleMap().getOwnedRegions(myName)) {
+                // We own all of this region's neighbors
+                Set<Region> neighorsOwnedByOpponent = region.getNeighorsOwnedBy(state.getOpponentPlayerName());
+                if (neighorsOwnedByOpponent.size() > 0) {
+                    placeArmiesMoves.add(new PlaceArmiesMove(myName, region, armiesLeft));
                 }
             }
         }
