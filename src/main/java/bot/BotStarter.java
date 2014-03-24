@@ -21,7 +21,9 @@ public class BotStarter implements Bot {
     private final float MIN_ATTACK_RATIO = 3;
     private final int NUM_STARTING_REGIONS = 6;
 
-    public BotStarter() {
+    public static void main(String[] args) {
+        BotParser parser = new BotParser(new BotStarter(), new Scanner(System.in), new BotState());
+        parser.run();
     }
 
     @Override
@@ -91,8 +93,7 @@ public class BotStarter implements Bot {
     public ArrayList<AttackTransferMove> getAttackTransferMoves(BotState state, Long timeOut) {
         ArrayList<AttackTransferMove> attackTransferMoves = new ArrayList<>();
         String myName = state.getMyPlayerName();
-
-        // TODO attack opponents, not just neutrals
+        int commitedArmies = 0;
 
         // Attack neutral regions
         for (SuperRegion superRegion : getSuperRegionsByHighestOwnership(state, myName)) {
@@ -102,27 +103,40 @@ public class BotStarter implements Bot {
             }
 
             for (Region myRegion : superRegion.getOwnedRegions(myName)) {
-                int commitedArmies = 0;
-
                 // Regions with neutral neighbors
                 LinkedList<Region> unownedNeighbors = myRegion.getNeighborsNotOwned(myName);
                 for (Region regionToAttack : unownedNeighbors) {
                     int availableArmies = myRegion.getArmies() - commitedArmies - 1;
-                    if (availableArmies < MIN_ATTACK_ARMIES) {
+                    int neededToAttack = (int) Math.ceil(regionToAttack.getArmies() * MIN_ATTACK_RATIO);
+                    if (availableArmies < MIN_ATTACK_ARMIES || availableArmies < neededToAttack) {
                         break;
                     }
 
-                    int neededToAttack = (int) Math.ceil(regionToAttack.getArmies() * MIN_ATTACK_RATIO);
-                    if (availableArmies >= neededToAttack) {
-                        attackTransferMoves.add(new AttackTransferMove(myName, myRegion, regionToAttack, neededToAttack));
-                        commitedArmies += neededToAttack;
-                    }
+                    System.err.println("Attacking " + regionToAttack.getId() + " from " + myRegion + " with " + neededToAttack + " armies");
+                    attackTransferMoves.add(new AttackTransferMove(myName, myRegion, regionToAttack, neededToAttack));
+                    commitedArmies += neededToAttack;
                 }
             }
         }
 
+        // Attack opponents
+        for (Region myRegion : state.getVisibleMap().getOwnedRegions(myName)) {
+            Set<Region> opponentNeighbors = myRegion.getNeighorsOwnedBy(state.getOpponentPlayerName());
+            for (Region regionToAttack : opponentNeighbors) {
+                int availableArmies = myRegion.getArmies() - commitedArmies - 1;
+                int neededToAttack = (int) Math.ceil(regionToAttack.getArmies() * MIN_ATTACK_RATIO);
+                if (availableArmies >= neededToAttack) {
+                    System.err.println("Attacking " + regionToAttack.getId() + " from " + myRegion + " with " + neededToAttack + " armies");
+                    attackTransferMoves.add(new AttackTransferMove(myName, myRegion, regionToAttack, neededToAttack));
+                    commitedArmies += neededToAttack;
+                }
+            }
+
+        }
+
         // Move armies that are in regions surrounded by owned regions
         for (Region region : state.getVisibleMap().getOwnedRegions(myName)) {
+            // We own all of this region's neighbors
             if (region.getNeighborsNotOwned(myName).size() == 0) {
                 // Find the neighboring region with the most unowned neighbors
                 Map<Region, Integer> numUnownedNeighborsOfNeighbors = new HashMap<>();
@@ -158,12 +172,13 @@ public class BotStarter implements Bot {
         return MapUtil.sortByValue(superRegionOwnershipShares).keySet();
     }
 
+    /**
+     * Get the number of armies needed to take a region
+     *
+     * @param region The region to attack
+     * @return The number of armies needed to takt eh given region
+     */
     private int armiesNeeded(Region region) {
         return (int) Math.ceil((MIN_ATTACK_RATIO * region.getArmies()));
-    }
-
-    public static void main(String[] args) {
-        BotParser parser = new BotParser(new BotStarter(), new Scanner(System.in), new BotState());
-        parser.run();
     }
 }

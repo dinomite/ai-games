@@ -1,6 +1,8 @@
 package com.theaigames.warlight.map;
 
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 /**
  * A Region on the map
@@ -125,6 +127,18 @@ public class Region {
         }
 
         return unownedNeighbors;
+    }
+
+    public Set<Region> getNeighorsOwnedBy(String playerName) {
+        Set<Region> neighborsOwned = new HashSet<>();
+
+        for (Region region : neighbors) {
+            if (!region.ownedByPlayer(playerName)) {
+                neighborsOwned.add(region);
+            }
+        }
+
+        return neighborsOwned;
     }
 
     private boolean isNeutral() {
