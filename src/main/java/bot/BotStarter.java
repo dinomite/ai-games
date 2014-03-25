@@ -106,7 +106,6 @@ public class BotStarter implements Bot {
     public ArrayList<AttackTransferMove> getAttackTransferMoves(BotState state, Long timeOut) {
         ArrayList<AttackTransferMove> attackTransferMoves = new ArrayList<>();
         String myName = state.getMyPlayerName();
-        int commitedArmies = 0;
 
         // Attack neutral regions
         for (SuperRegion superRegion : getSuperRegionsByHighestOwnership(state, myName)) {
@@ -116,6 +115,8 @@ public class BotStarter implements Bot {
             }
 
             for (Region myRegion : superRegion.getOwnedRegions(myName)) {
+                int commitedArmies = 0;
+
                 // Regions with neutral neighbors
                 LinkedList<Region> unownedNeighbors = myRegion.getNeighborsNotOwned(myName);
                 for (Region regionToAttack : unownedNeighbors) {
@@ -133,6 +134,8 @@ public class BotStarter implements Bot {
 
         // Attack opponents
         for (Region myRegion : state.getVisibleMap().getOwnedRegions(myName)) {
+            int commitedArmies = 0;
+
             Set<Region> opponentNeighbors = myRegion.getNeighorsOwnedBy(state.getOpponentPlayerName());
             for (Region regionToAttack : opponentNeighbors) {
                 int availableArmies = myRegion.getArmies() - commitedArmies - 1;
