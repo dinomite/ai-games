@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class BotStarter implements Bot {
     private final int MIN_ATTACK_ARMIES = 2;
-    private final float MIN_ATTACK_RATIO = 3;
+    private final float MIN_ATTACK_RATIO = 2;
     private final int NUM_STARTING_REGIONS = 6;
 
     public static void main(String[] args) {
