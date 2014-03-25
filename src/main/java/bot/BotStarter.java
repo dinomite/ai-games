@@ -47,6 +47,8 @@ public class BotStarter implements Bot {
 
     @Override
     public ArrayList<PlaceArmiesMove> getPlaceArmiesMoves(BotState state, Long timeOut) {
+        System.err.println("################ Round " + state.getRoundNumber() + " ################");
+
         ArrayList<PlaceArmiesMove> placeArmiesMoves = new ArrayList<>();
         String myName = state.getMyPlayerName();
         int armiesLeft = state.getStartingArmies();
@@ -97,7 +99,6 @@ public class BotStarter implements Bot {
             }
         }
 
-        System.err.println("=> Round " + state.getRoundNumber() + ": " + placeArmiesMoves.size() + " placement moves");
         return placeArmiesMoves;
     }
 
@@ -124,7 +125,6 @@ public class BotStarter implements Bot {
                         break;
                     }
 
-                    System.err.println("Attacking " + regionToAttack.getId() + " from " + myRegion + " with " + neededToAttack + " armies");
                     attackTransferMoves.add(new AttackTransferMove(myName, myRegion, regionToAttack, neededToAttack));
                     commitedArmies += neededToAttack;
                 }
@@ -138,7 +138,6 @@ public class BotStarter implements Bot {
                 int availableArmies = myRegion.getArmies() - commitedArmies - 1;
                 int neededToAttack = (int) Math.ceil(regionToAttack.getArmies() * MIN_ATTACK_RATIO);
                 if (availableArmies >= neededToAttack) {
-                    System.err.println("Attacking " + regionToAttack.getId() + " from " + myRegion + " with " + neededToAttack + " armies");
                     attackTransferMoves.add(new AttackTransferMove(myName, myRegion, regionToAttack, neededToAttack));
                     commitedArmies += neededToAttack;
                 }
@@ -163,7 +162,16 @@ public class BotStarter implements Bot {
             }
         }
 
-        System.err.println("===> Round " + state.getRoundNumber() + ": " + attackTransferMoves.size() + " attack/transfer moves");
+        for (AttackTransferMove move : attackTransferMoves) {
+            Region myRegion = move.getFromRegion();
+            int myRID = myRegion.getId();
+            int mySRID = myRegion.getSuperRegion().getId();
+            Region regionToAttack = move.getToRegion();
+            int rtaID = regionToAttack.getId();
+            int rtaSRID = regionToAttack.getSuperRegion().getId();
+            System.err.println("Attacking " + rtaID + " ("+ rtaSRID +")" + " from " + myRID + " ("+ mySRID +") " + " with " + move.getArmies() + " armies");
+        }
+
         return attackTransferMoves;
     }
 
