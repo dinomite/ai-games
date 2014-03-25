@@ -163,6 +163,7 @@ public class BotStarter implements Bot {
             }
         }
 
+        System.err.println("===> Round " + state.getRoundNumber() + ": " + attackTransferMoves.size() + " attack/transfer moves");
         return attackTransferMoves;
     }
 
@@ -177,7 +178,6 @@ public class BotStarter implements Bot {
         Map<SuperRegion, Float> superRegionOwnershipShares = new HashMap<>();
         for (SuperRegion superRegion : state.getVisibleMap().getSuperRegions()) {
             float ownershipShare = superRegion.ownershipShare(myName);
-            System.err.println("SuperRegion " + superRegion.getId() + " ownership share: " + ownershipShare);
             superRegionOwnershipShares.put(superRegion, ownershipShare);
         }
 
